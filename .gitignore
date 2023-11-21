@@ -32,3 +32,16 @@ default_env.tres
 
 # Windows
 *.bat
+*.cache
+.godot/editor/editor_layout.cfg
+.godot/editor/filesystem_cache8
+.godot/editor/project_metadata.cfg
+.godot/editor/script_editor_cache.cfg
+.godot/global_script_class_cache.cfg
+.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex
+.godot/mono/metadata/ide_messaging_meta.txt
+.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.md5
+.godot/uid_cache.bin
+icon.svg
+icon.svg.import
+.godot/.gdignore
