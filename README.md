@@ -1,7 +1,7 @@
 Discord.gd
 =========================================
 ### A Godot plugin to interact with the Discord Bot API. Make Discord Bots in Godot!
-
+### Nonfunctional.
 > 100% GDScript
 
 <br>
