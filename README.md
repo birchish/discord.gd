@@ -1,14 +1,11 @@
 Discord.gd
 =========================================
-###### (Get it from Godot Asset Library - https://godotengine.org/asset-library/asset/1010)
-
-
 ### A Godot plugin to interact with the Discord Bot API. Make Discord Bots in Godot!
 
 > 100% GDScript
 
 <br>
-<img alt="Godot3" src="https://img.shields.io/badge/-Godot 3.x-478CBF?style=for-the-badge&logo=godotengine&logoWidth=20&logoColor=white" />
+<img alt="Godot4" src="https://img.shields.io/badge/-Godot 4.x-478CBF?style=for-the-badge&logo=godotengine&logoWidth=20&logoColor=white" />
 
 Features
 --------------
@@ -18,19 +15,19 @@ Features
 - Supports `Application Commands` aka `Slash Commands`
 - Uses Godot signals to emit events like `bot_ready`, `guild_create`, `message_create`, `message_delete`, etc.
 - Get User Avatar and Guild Icon as Godot's `ImageTexture`
-- Uses coroutine async functions i.e Promises
+- Uses coroutine async functions i.e., Promises
 
 
 Installation
 --------------
 
 This is a regular plugin for Godot.
-Copy the contents of `addons/discord_gd` into the `addons/` folder in the same directory as your project, and activate it in your project settings.
+Copy the contents of `addons/discord_gd` into the `addons/` folder in the same directory as your project and activate it in your project settings.
 
 The plugin now comes with no extra assets to stay lightweight.
 If you want to try an example scene, you can see the examples from: [Discord.gd Examples](https://github.com/3ddelano/discord_gd_examples)
 
-> For in-depth installation instructions check the [Installation Wiki](https://3ddelano.github.io/discord.gd/installation)
+> For in-depth installation instructions, check the [Installation Wiki](https://3ddelano.github.io/discord.gd/installation)
 
 > Note: You will need a valid Discord Bot token available at [Discord Applications](https://discord.com/developers/applications)
 
@@ -38,10 +35,10 @@ If you want to try an example scene, you can see the examples from: [Discord.gd 
 Getting Started
 ----------
 
-1. After activating the plugin. There will be a new `DiscordBot` node added to Godot.
-Click on any node in the scene tree of your scene for example `Root` and add the `DiscordBot` node as a child.
+1. After activating the plugin. A new `DiscordBot` node will be added to Godot.
+Click on any node in the scene tree of your scene, for example, `Root`, and add the `DiscordBot` node as a child.
 
-2. Connect the various signals (`bot_ready`, `guild_create`, `message_create`, `message_delete`, etc) of the `DiscordBot` node to the parent node, either through the editor or in the script using the `connect()` method.
+2. Connect the various signals (`bot_ready,` `guild_create,` `message_create,` `message_delete,` etc) of the `DiscordBot` node to the parent node, either through the editor or in the script using the `connect()` method.
 
 3. Attach a script to the `Root` node.
 
@@ -67,7 +64,7 @@ func _on_DiscordBot_bot_ready(bot: DiscordBot):
 Contributing
 -----------
 
-This plugin is a non-profit project developped by voluntary contributors.
+This plugin is a non-profit project developed by voluntary contributors.
 
 ### Supporters
 
@@ -80,4 +77,4 @@ This plugin is a non-profit project developped by voluntary contributors.
 
 Want to support in other ways? Contact me on Discord: `@3ddelano#6033`
 
-For doubts / help / bugs / problems / suggestions do join: [3ddelano Cafe](https://discord.gg/FZY9TqW)
+For doubts/help/bugs/problems/suggestions, do join [3ddelano Cafe](https://discord.gg/FZY9TqW)
