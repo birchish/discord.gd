@@ -75,10 +75,10 @@ func to_array():
 	return ret
 
 func resolve(bit):
-	if typeof(default_bit) == TYPE_INT or typeof(default_bit) == TYPE_REAL:
+	if typeof(default_bit) == TYPE_INT or typeof(default_bit) == TYPE_FLOAT:
 		default_bit = int(default_bit)
 
-	if typeof(bit) == TYPE_INT or typeof(bit) == TYPE_REAL:
+	if typeof(bit) == TYPE_INT or typeof(bit) == TYPE_FLOAT:
 		bit = int(bit)
 
 	if typeof(default_bit) == typeof(bit):
@@ -109,7 +109,7 @@ func _init(bits = default_bit):
 		bits = default_bit
 	bitfield = resolve(bits)
 
-	return self
+	return # self
 
 func _to_dict():
 	if typeof(bitfield) == TYPE_INT:

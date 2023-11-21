@@ -7,23 +7,23 @@ var _STYLES = {0: 'DEFAULT', 1: 'PRIMARY', 2: 'SECONDARY', 3: 'SUCCESS', 4: 'DAN
 
 enum STYLES { DEFAULT, PRIMARY, SECONDARY, SUCCESS, DANGER, LINK }
 
-var label: String setget set_label, get_label
-var custom_id: String setget set_custom_id, get_custom_id
-var url: String setget set_url, get_url
-var disabled: bool = false setget set_disabled, get_disabled
+var label: String : set = set_label, get = get_label
+var custom_id: String : set = set_custom_id, get =  get_custom_id
+var url: String : set = set_url, get =  get_url
+var disabled: bool = false : set = set_disabled, get =  get_disabled
 var emoji: Dictionary
 
-var _style setget set_style, get_style
+var _style : set = set_style, get = get_style
 var type: int = 2
 
 
-func set_style(style_number: int):
+func set_style(style_number):
 	_style = style_number
 	return self
 
 
 func get_style() -> String:
-	return _STYLES[_style]
+	return _STYLES[int(_style)]
 
 
 func set_label(new_label: String):
@@ -73,11 +73,14 @@ func get_emoji() -> Dictionary:
 
 
 func _init():
-	return self
+	return # self
 
 
 func _to_string(pretty: bool = false) -> String:
-	return JSON.print(_to_dict(), '\t') if pretty else JSON.print(_to_dict())
+	if pretty:
+		return JSON.stringify(_to_dict(), '\t')  
+	else:
+		return JSON.stringify(_to_dict())
 
 
 func print():

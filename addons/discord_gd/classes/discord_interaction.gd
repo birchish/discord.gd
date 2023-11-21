@@ -68,8 +68,8 @@ func respond_autocomplete(choices: Array):
 			'choices': choices
 		}
 	}
-	var res = yield(
-		bot._send_request('/interactions/%s/%s/callback' % [id, token], payload), 'completed'
+	var res = await(
+		bot._send_request('/interactions/%s/%s/callback' % [id, token], payload) 
 	)
 	return res
 
@@ -78,15 +78,14 @@ func fetch_reply(message_id: String = '@original'):
 	#assert(not ephemeral, 'Unable to fetch ephemeral Interaction reply.')
 	if ephemeral:
 		push_error('Unable to fetch ephemeral reply.')
-		return yield()
+		return #await()
 
-	var msg = yield(
-		bot._send_get('/webhooks/%s/%s/messages/%s' % [application_id, token, message_id]),
-		'completed'
+	var msg = await(
+		bot._send_get('/webhooks/%s/%s/messages/%s' % [application_id, token, message_id])
 	)
 	var coroutine = bot._parse_message(msg)
 	if typeof(coroutine) == TYPE_OBJECT:
-		coroutine = yield(coroutine, 'completed')
+		coroutine = await(coroutine)
 
 	return Message.new(msg)
 
@@ -94,11 +93,11 @@ func fetch_reply(message_id: String = '@original'):
 func reply(options: Dictionary):
 	if replied or deferred:
 		push_error('Already replied to Interaction.')
-		return yield()
+		return #await()
 
 	options.type = RESPONSE_TYPES['CHANNEL_MESSAGE_WITH_SOURCE']
-	var res = yield(
-		_send_request('/interactions/%s/%s/callback' % [id, token], options), 'completed'
+	var res = await(
+		_send_request('/interactions/%s/%s/callback' % [id, token], options) 
 	)
 	replied = true
 
@@ -108,9 +107,9 @@ func reply(options: Dictionary):
 func edit_reply(options: Dictionary):
 	if (not replied) and (not deferred):
 		push_error('Unable to edit Interaction. Not replied.')
-		return yield()
+		return #await()
 
-	var res = yield(_edit_message('@original', options), 'completed')
+	var res = await(_edit_message('@original', options) )
 	replied = true
 	return res
 
@@ -118,19 +117,19 @@ func edit_reply(options: Dictionary):
 func delete_reply():
 	if ephemeral:
 		push_error('Unable to delete ephemeral Interaction reply.')
-		return yield()
+		return #await()
 
-	return yield(_delete_message(), 'completed')
+	return await(_delete_message() )
 
 
 func defer_reply(options: Dictionary = {}):
 	if replied or deferred:
 		push_error('Already replied to Interaction.')
-		return yield()
+		return #await()
 
 	options.type = RESPONSE_TYPES['DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE']
-	var res = yield(
-		_send_request('/interactions/%s/%s/callback' % [id, token], options), 'completed'
+	var res = await(
+		_send_request('/interactions/%s/%s/callback' % [id, token], options) 
 	)
 	deferred = true
 	return res
@@ -139,11 +138,11 @@ func defer_reply(options: Dictionary = {}):
 func update(options: Dictionary):
 	if replied or deferred:
 		push_error('Already replied to Interaction.')
-		return yield()
+		return # await()
 
 	options.type = RESPONSE_TYPES['UPDATE_MESSAGE']
-	var msg = yield(
-		_send_request('/interactions/%s/%s/callback' % [id, token], options), 'completed'
+	var msg = await(
+		_send_request('/interactions/%s/%s/callback' % [id, token], options) 
 	)
 	replied = true
 	return msg
@@ -152,11 +151,11 @@ func update(options: Dictionary):
 func defer_update(options: Dictionary = {}):
 	if replied or deferred:
 		push_error('Already replied to Interaction.')
-		return yield()
+		return #await()
 
 	options.type = RESPONSE_TYPES['DEFERRED_UPDATE_MESSAGE']
-	var res = yield(
-		_send_request('/interactions/%s/%s/callback' % [id, token], options), 'completed'
+	var res = await(
+		_send_request('/interactions/%s/%s/callback' % [id, token], options) 
 	)
 	deferred = true
 	return res
@@ -164,25 +163,22 @@ func defer_update(options: Dictionary = {}):
 
 func follow_up(options: Dictionary):
 	options.type = RESPONSE_TYPES['CHANNEL_MESSAGE_WITH_SOURCE']
-	var res = yield(
+	var res = await(
 		_send_request(
-			'/webhooks/%s/%s' % [application_id, token], options, HTTPClient.METHOD_POST, true
-		),
-		'completed'
-	)
+			'/webhooks/%s/%s' % [application_id, token], options, HTTPClient.METHOD_POST, true))
 	return res
 
 
 func edit_follow_up(msg: Message, options: Dictionary):
 #	options.type = RESPONSE_TYPES['CHANNEL_MESSAGE_WITH_SOURCE']
-#	var res = yield(_send_request('/webhooks/%s/%s/messages/%s' % [application_id, token, message.id], options, HTTPClient.METHOD_PATCH, true), 'completed')
+#	var res = await(_send_request('/webhooks/%s/%s/messages/%s' % [application_id, token, message.id], options, HTTPClient.METHOD_PATCH, true) )
 #	return res
-	var res = yield(_edit_message(msg.id, options), 'completed')
+	var res = await(_edit_message(msg.id, options) )
 	return res
 
 
 func delete_follow_up(msg: Message):
-	var res = yield(_delete_message(msg.id), 'completed')
+	var res = await(_delete_message(msg.id) )
 	return res
 
 
@@ -191,26 +187,16 @@ func has(attribute):
 
 
 func _delete_message(message_id: String = '@original'):
-	var res = yield(
-		bot._send_get(
-			'/webhooks/%s/%s/messages/%s' % [application_id, token, message_id],
-			HTTPClient.METHOD_DELETE
-		),
-		'completed'
-	)
+	var res = await(
+		bot._send_get('/webhooks/%s/%s/messages/%s' % [application_id, token, message_id],HTTPClient.METHOD_DELETE))
 	return res
 
 
 func _edit_message(message_id: String, options: Dictionary):
 	options.type = RESPONSE_TYPES['CHANNEL_MESSAGE_WITH_SOURCE']
-	var msg = yield(
+	var msg = await(
 		_send_request(
-			'/webhooks/%s/%s/messages/%s' % [application_id, token, message_id],
-			options,
-			HTTPClient.METHOD_PATCH
-		),
-		'completed'
-	)
+			'/webhooks/%s/%s/messages/%s' % [application_id, token, message_id],options,HTTPClient.METHOD_PATCH))
 	return msg
 
 
@@ -281,24 +267,24 @@ func _send_request(
 		payload = payload.data
 
 	var res
-	var coroutine = yield(
-		bot._send_raw_request(slug, {'payload': payload, 'files': files}, method), 'completed'
+	var coroutine = await(
+		bot._send_raw_request(slug, {'payload': payload, 'files': files}, method) 
 	)
 
 	if typeof(coroutine) == TYPE_OBJECT:
-		res = yield(coroutine, 'completed')
+		res = await(coroutine )
 	else:
 		res = coroutine
 
 	if is_follow_up:
 		coroutine = bot._parse_message(res)
 		if typeof(coroutine) == TYPE_OBJECT:
-			coroutine = yield(coroutine, 'completed')
+			coroutine = await(coroutine )
 
 		return Message.new(res)
 
 	if _fetch_reply:
-		return yield(fetch_reply('@original'), 'completed')
+		return await(fetch_reply('@original') )
 	else:
 		return true
 
@@ -321,7 +307,7 @@ func _init(_bot, interaction: Dictionary):
 	if interaction.has('message'):
 		var coroutine = bot._parse_message(interaction.message)
 		if typeof(coroutine) == TYPE_OBJECT:
-			coroutine = yield(coroutine, 'completed')
+			coroutine = await(coroutine )
 
 		message = Message.new(interaction.message)
 
@@ -357,7 +343,12 @@ func _parse_data_options(data, option = false):
 	return data
 
 func _to_string(pretty: bool = false) -> String:
-	return JSON.print(_to_dict(), '\t') if pretty else JSON.print(_to_dict())
+	var out : String
+	if pretty:
+		out = JSON.stringify(_to_dict(), '\t')  
+	else:
+		out = JSON.stringify(_to_dict())
+	return out
 
 
 func print():

@@ -3,14 +3,14 @@ class_name SelectMenu
 Represents a Discord select menu.
 """
 
-var custom_id: String setget set_custom_id, get_custom_id
-var placeholder: String setget set_placeholder, get_placeholder
-var options: Array setget set_options, get_options
+var custom_id: String : set = set_custom_id, get =  get_custom_id
+var placeholder: String : set = set_placeholder, get =  get_placeholder
+var options: Array : set = set_options, get =  get_options
 
-var min_values = 1 setget set_min_values, get_min_values
-var max_values = 1 setget set_max_values, get_max_values
+var min_values = 1 : set = set_min_values, get =  get_min_values
+var max_values = 1 : set = set_max_values, get =  get_max_values
 
-var disabled: bool = false setget set_disabled, get_disabled
+var disabled: bool = false : set = set_disabled, get = get_disabled
 
 var type: int = 3
 
@@ -99,10 +99,14 @@ func get_disabled() -> bool:
 
 
 func _init():
-	return self
+	return # self
 
 func _to_string(pretty: bool = false) -> String:
-	return JSON.print(_to_dict(), '\t') if pretty else JSON.print(_to_dict())
+	if pretty:
+		return JSON.stringify(_to_dict(), '\t')  
+	else:
+		return JSON.stringify(_to_dict())
+
 
 func print():
 	print(_to_string(true))

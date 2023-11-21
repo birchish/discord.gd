@@ -22,7 +22,7 @@ func _init(bits = default_bit):
 
 	bitfield = resolve(bits)
 
-	return self
+	return # self
 
 func missing(bits):
 	var BF = load('res://addons/discord_gd/classes/message_flags.gd')
