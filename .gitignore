@@ -36,7 +36,12 @@ default_env.tres
 icon.svg
 icon.svg.import
 .godot/
-addons\nodewebsockets
+addons/SignalVisualizer/
+addons/script-ide/
+addons/nodewebsockets/
 discord_bot.gd
 discord_bot.tscn
 docs/assets/favicon.png.import
+addons/script-ide/icon/export.svg
+DiscordBot.tscn
+.github/ISSUE_TEMPLATE/bug_report.md

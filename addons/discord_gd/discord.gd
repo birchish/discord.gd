@@ -10,7 +10,7 @@ For Copyright and License: See LICENSE.md
 
 # Public Variables
 var TOKEN: String
-var VERBOSE: bool = false
+var VERBOSE: bool = true
 var INTENTS: int = 513
 
 # Caches
@@ -40,7 +40,7 @@ var _api_slug = '/api/v9'
 var _https_base = _https_domain + _api_slug
 var _cdn_base = 'https://cdn.discordapp.com'
 var _headers: Array
-var _client : WebSocketPeer
+var _client
 var _sess_id: String
 var _last_seq: float
 var _invalid_session_is_resumable: bool
@@ -365,22 +365,20 @@ func get_commands(guild_id: String = '') -> Array:
 # Private Functions
 func _ready() -> void:
 	randomize()
-
 	# Generate needed nodes
 	_generate_timer_nodes()
-
 	# Setup web socket client
-	_client = WebSocketPeer.new()
+	_client = %WebSocketClient
 	# _client.connect('connection_closed', self, '_connection_closed')
-	_client.closed.connect(_connection_closed)
+	_client.connection_closed.connect(_connection_closed)
 	# _client.connect('connection_error', self, '_connection_error')
-	_client.connect_failed.connect(_connection_error)
+	_client.connection_error.connect(_connection_error)
 	# _client.connect('connection_established', self, '_connection_established')
-	_client.connected.connect(_connection_established)
+	_client.connection_established.connect(_connection_established)
 	# _client.connect('data_received', self, '_data_received')
-	_client.received.connect(_data_received)
+	_client.data_received.connect(_data_received)
 	# $HeartbeatTimer.connect('timeout', self, '_send_heartbeat')	
-	$HeartbeatTimer.connected.connect(_send_heartbeat)
+	$HeartbeatTimer.timeout.connect(_send_heartbeat)
 	
 
 
@@ -394,13 +392,10 @@ func _generate_timer_nodes() -> void:
 	add_child(invalid_session_timer)
 
 
-func _connection_closed(was_clean_close: bool) -> void:
-	if was_clean_close:
-		if VERBOSE:
-			print('WSS connection closed cleanly')
-	else:
-		if VERBOSE:
-			print('WSS connection closed unexpectedly')
+func _connection_closed(code,reason) -> void:
+	if VERBOSE:
+		print(code)
+		print(reason)
 
 
 func _connection_error() -> void:
@@ -408,7 +403,7 @@ func _connection_error() -> void:
 		print('WSS connection error')
 
 
-func _connection_established(protocol: String) -> void:
+func _connection_established(protocol) -> void:
 	if VERBOSE:
 		print('Connected with protocol: ', protocol)
 
@@ -458,17 +453,17 @@ func _data_received() -> void:
 			_handle_events(dict)
 
 
-func _process(_delta) -> void:
+func _physics_process(delta) -> void:
 	# Run only when in game and not in the editor
 	if not Engine.is_editor_hint():
 		# Poll the web socket if connected otherwise reconnect
 		#var is_connected = (_client.get_connection_status() != NetworkedMultiplayerPeer.CONNECTION_DISCONNECTED)
-		var is_connected = (_client.get_connection_status())
+		var is_connected = (_client.get_ready_state())
 		if is_connected:
 			_client.poll()
 
 		elif _logged_in:
-			_client.connect_to_url(_gateway_base)
+			print(_client.connect_to_url(_gateway_base))
 
 
 func _send_heartbeat() -> void:  # Send heartbeat OP code 1
